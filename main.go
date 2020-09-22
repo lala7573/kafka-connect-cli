@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"fmt"
 	
 	"github.com/spf13/cobra"
 )
@@ -11,6 +12,15 @@ func getenv(key string, defaultVal string) string {
         return value
 		}
 	return defaultVal
+}
+
+const version = "0.0.1"
+var cmdVersion = &cobra.Command{
+	Use:                   "version",
+	Short:                 "version",
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println(version, "https://github.com/lala7573/kafka-connect-cli")
+	},
 }
 
 func main() {
@@ -29,6 +39,8 @@ func main() {
 	cmdRoot.AddCommand(cmdConnectorResume)
 	cmdRoot.AddCommand(cmdConnectorRestart)
 	cmdRoot.AddCommand(cmdConnectorValidate)
+
+	cmdRoot.AddCommand(cmdVersion)
 
 	// cmdRoot.AddCommand(cmdCompletion)
 	cmdRoot.Execute()
