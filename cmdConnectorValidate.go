@@ -4,7 +4,6 @@ import (
 	"os"
 	"log"
 	"bytes"
-	"strings"
 	"net/http"
 	"io/ioutil"
 	"encoding/json"
@@ -24,15 +23,14 @@ var cmdConnectorValidate = &cobra.Command{
 		config.Config["name"] = name
 		jsonBytes, _ := json.Marshal(&config.Config)
 		className := config.Config["connector.class"]
-		classNameSplit := strings.Split(className, ".")
-		classNameOnly := classNameSplit[len(classNameSplit)-1]
-		url := GetKafkaConnectUrl("connector-plugins", classNameOnly, "config/validate")
+		url := GetKafkaConnectUrl("connector-plugins", className, "config/validate")
 		req, err := http.NewRequest("PUT", url, bytes.NewBuffer(jsonBytes))
 		if err != nil {
 			log.Fatal(err)
 		}
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Add("Accept", "application/json")
+
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			log.Fatal(err)
@@ -50,7 +48,7 @@ var cmdConnectorValidate = &cobra.Command{
 
 		for _, config:= range response.Configs {
 			if len(config.Value.Errors) > 0 {
-				enc := json.NewEncoder(os.Stdout)
+				enc := json.NewEncoder(os.Stderr)
 				enc.SetIndent("", "  ")
 				enc.Encode(config.Value)
 			}

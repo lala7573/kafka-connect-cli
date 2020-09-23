@@ -6,8 +6,8 @@ build:
 
 .PHONY: linux
 linux: 
-	env GOOS=linux GOARCH=amd64 go build -o kafka-connect-cli-linux .
+	env GOOS=linux GOARCH=amd64 go build -o kafka-connect-cli.linux .
 
-.PHONY: mac
+.PHONY: darwin
 mac: 
-	env GOOS=darwin GOARCH=amd64 go build -o kafka-connect-cli-mac .
+	env GOOS=darwin GOARCH=amd64 go build -o kafka-connect-cli.darwin .

@@ -23,7 +23,7 @@ var cmdConnectorDelete = &cobra.Command{
 			log.Fatal(err)
 		}
 		if resp.StatusCode == 204 {
-			fmt.Printf("ok")
+			fmt.Printf("deleted")
 		} else {	
 			fmt.Printf("%d", resp.StatusCode)
 		}
