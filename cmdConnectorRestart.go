@@ -11,6 +11,10 @@ var cmdConnectorRestart = &cobra.Command{
 	Use:   "restart [name]",
 	Short: "Restart connector",
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println(cmd.Use)
+			return
+		}
 		url := GetKafkaConnectUrl("connectors", args[0], "restart")
 			req, err := http.NewRequest("POST", url, nil)
 		if err != nil {

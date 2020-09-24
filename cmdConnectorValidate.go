@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"fmt"
 	"log"
 	"bytes"
 	"net/http"
@@ -14,6 +15,11 @@ var cmdConnectorValidate = &cobra.Command{
 	Use:   "validate [name] [file(.json|.properties)]",
 	Short: "Validate connector config",
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) <= 1 {
+			fmt.Println(cmd.Use)
+			return
+		} 
+		
 		name, filename := args[0], args[1]
 		config, err := GetConfigFromFile(name, filename)
 		if err != nil {
@@ -27,6 +33,7 @@ var cmdConnectorValidate = &cobra.Command{
 		req, err := http.NewRequest("PUT", url, bytes.NewBuffer(jsonBytes))
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Add("Accept", "application/json")
@@ -34,18 +41,20 @@ var cmdConnectorValidate = &cobra.Command{
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		body, err := ioutil.ReadAll(resp.Body);
 		defer resp.Body.Close()
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		var response ValidateResponse
 		if err = json.Unmarshal(body, &response); err != nil {
 			log.Fatal("Failed to print json", err)
 		}
-
+		fmt.Println("ErrorCount:", response.ErrorCount)
 		for _, config:= range response.Configs {
 			if len(config.Value.Errors) > 0 {
 				enc := json.NewEncoder(os.Stderr)

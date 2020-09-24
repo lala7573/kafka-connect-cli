@@ -11,8 +11,13 @@ var cmdConnectorDelete = &cobra.Command{
 	Use:   "delete [name]",
 	Short: "Delete connector",
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) == 0 {
+			fmt.Println(cmd.Use)
+			return
+		}
+		
 		name := args[0]
-		url := GetKafkaConnectUrl("/connectors", name)
+		url := GetKafkaConnectUrl("connectors", name)
 		req, err := http.NewRequest("DELETE", url, nil)
     if err != nil {
         fmt.Println(err)

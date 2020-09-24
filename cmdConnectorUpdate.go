@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"fmt"
 	"bytes"
 	"net/http"
 	"encoding/json"
@@ -12,6 +13,11 @@ var cmdConnectorUpdate = &cobra.Command{
 	Use:   "update [name] [file(.json|.properties)]",
 	Short: "Update connector",
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) <= 1{
+			fmt.Println(cmd.Use)
+			return
+		}
+		
 		name, filename := args[0], args[1]
 		url := GetKafkaConnectUrl("connectors", name, "update")
 		config, err := GetConfigFromFile(name, filename)
