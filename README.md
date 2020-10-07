@@ -33,7 +33,7 @@ Use "./kafka-connect-cli [command] --help" for more information about a command.
 ## Build
 
 ```bash
-make all
+make
 # to develop
 go build .
 ```
