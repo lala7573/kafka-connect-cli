@@ -17,13 +17,13 @@ import (
 )
 
 func GetKafkaConnectUrl(paths ...string) string {
-	url, err := url.Parse(config.KAFKA_CONNECT_REST)
+	restUri, err := url.Parse(config.KAFKA_CONNECT_REST)
 	if err != nil {
 		log.Fatal(err)
 	}
-	p2 := append([]string{url.Path}, paths...)
-	url.Path = path.Join(p2...)
-	return url.String()
+	p2 := append([]string{restUri.Path}, paths...)
+	restUri.Path = path.Join(p2...)
+	return restUri.String()
 }
 
 func HandleResponse(resp *http.Response) {
@@ -31,11 +31,13 @@ func HandleResponse(resp *http.Response) {
 	defer resp.Body.Close()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
 
 	var obj interface{}
 	if err = json.Unmarshal(body, &obj); err != nil {
 		log.Fatal("Failed to print json", err)
+		return
 	}
 	
 	if config.FORMAT == "json" {
@@ -57,11 +59,11 @@ func GetConfigFromFile(name string, filename string) (*ConnectorConfig, error) {
 	if extension == ".json" {
 		content, err := ioutil.ReadFile(filename)
 		if err != nil {
-			log.Fatal("Failed to read file", err)
+			return nil, err
 		}
 		config := &ConnectorConfig{}
 		if err = json.Unmarshal(content, &config); err != nil {
-			log.Fatal("Failed to parse ", err)
+			return nil, err
 		}
 		
 		return config, nil

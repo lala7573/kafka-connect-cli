@@ -14,6 +14,7 @@ var cmdPlugins = &cobra.Command{
 		resp, err := httpClient.Get(url);
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		HandleResponse(resp)

@@ -23,12 +23,14 @@ var cmdConnectorCreate = &cobra.Command{
 		config, err := GetConfigFromFile(name, filename)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		
 		jsonBytes, _ := json.Marshal(&config)
 		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBytes))
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Add("Accept", "application/json")
@@ -36,6 +38,7 @@ var cmdConnectorCreate = &cobra.Command{
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		HandleResponse(resp)
 	},

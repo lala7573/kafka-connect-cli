@@ -16,17 +16,20 @@ var cmdConnectorList = &cobra.Command{
 		resp, err := httpClient.Get(url);
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		body, err := ioutil.ReadAll(resp.Body);
 		defer resp.Body.Close()
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		var arr []string
 		if err = json.Unmarshal(body, &arr); err != nil {
 			log.Fatal("Failed to print json", err)
+			return
 		}
 		if len(arr) == 0 {
 			fmt.Println("no connectors.")

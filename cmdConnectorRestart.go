@@ -19,11 +19,13 @@ var cmdConnectorRestart = &cobra.Command{
 			req, err := http.NewRequest("POST", url, nil)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		
 		if resp.StatusCode == 204 {

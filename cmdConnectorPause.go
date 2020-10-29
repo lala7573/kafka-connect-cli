@@ -19,11 +19,13 @@ var cmdConnectorPause = &cobra.Command{
 			req, err := http.NewRequest("PUT", url, nil)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		if resp.StatusCode == 202 {
 			fmt.Println("Paused")

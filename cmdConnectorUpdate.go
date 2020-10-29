@@ -19,16 +19,18 @@ var cmdConnectorUpdate = &cobra.Command{
 		}
 		
 		name, filename := args[0], args[1]
-		url := GetKafkaConnectUrl("connectors", name, "update")
+		url := GetKafkaConnectUrl("connectors", name, "config")
 		config, err := GetConfigFromFile(name, filename)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		
 		jsonBytes, _ := json.Marshal(&config.Config)
 		req, err := http.NewRequest("PUT", url, bytes.NewBuffer(jsonBytes))
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		req.Header.Add("Content-Type", "application/json")
 		req.Header.Add("Accept", "application/json")
@@ -36,6 +38,7 @@ var cmdConnectorUpdate = &cobra.Command{
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		HandleResponse(resp)
 	},

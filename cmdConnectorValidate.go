@@ -24,6 +24,7 @@ var cmdConnectorValidate = &cobra.Command{
 		config, err := GetConfigFromFile(name, filename)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 
 		config.Config["name"] = name
@@ -53,6 +54,7 @@ var cmdConnectorValidate = &cobra.Command{
 		var response ValidateResponse
 		if err = json.Unmarshal(body, &response); err != nil {
 			log.Fatal("Failed to print json", err)
+			return
 		}
 		fmt.Println("ErrorCount:", response.ErrorCount)
 		for _, config:= range response.Configs {

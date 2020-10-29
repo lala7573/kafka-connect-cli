@@ -15,7 +15,7 @@ var cmdConnectorDelete = &cobra.Command{
 			fmt.Println(cmd.Use)
 			return
 		}
-		
+
 		name := args[0]
 		url := GetKafkaConnectUrl("connectors", name)
 		req, err := http.NewRequest("DELETE", url, nil)
@@ -26,6 +26,7 @@ var cmdConnectorDelete = &cobra.Command{
 		resp, err := httpClient.Do(req)
 		if err != nil {
 			log.Fatal(err)
+			return
 		}
 		if resp.StatusCode == 204 {
 			fmt.Printf("deleted")
