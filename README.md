@@ -2,6 +2,11 @@
 
 A command line interface (CLI) around the Kafka Connect REST Interface to manage connectors without any dependency.
 
+## Installation
+```
+brew install lala7573/homebrew-tap/kafka-connect-cli
+```
+
 ## Usage
 
 ```bash
