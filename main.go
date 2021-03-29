@@ -14,7 +14,7 @@ func getenv(key string, defaultVal string) string {
 	return defaultVal
 }
 
-const version = "0.0.1"
+const version = "0.0.2"
 var cmdVersion = &cobra.Command{
 	Use:                   "version",
 	Short:                 "Version",
@@ -26,7 +26,7 @@ var cmdVersion = &cobra.Command{
 func main() {
 	cmdRoot := &cobra.Command{Use: os.Args[0]}
 	cmdRoot.PersistentFlags().StringVarP(&config.KAFKA_CONNECT_REST, "endpoint", "e", getenv("KAFKA_CONNECT_REST", "http://localhost:8083/"), "kafka connect rest")
-	cmdRoot.PersistentFlags().StringVarP(&config.FORMAT, "format", "f", "json", "format: properties | json")
+	cmdRoot.PersistentFlags().StringVarP(&config.FORMAT, "format", "f", "properties", "format: properties | json")
 	
 	cmdRoot.AddCommand(cmdPlugins)
 	cmdRoot.AddCommand(cmdConnectorList)

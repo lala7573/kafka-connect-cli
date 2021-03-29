@@ -34,19 +34,31 @@ func HandleResponse(resp *http.Response) {
 		return
 	}
 
+	// handle if config
+	var connectorConfig ConnectorConfig;
+	if err = json.Unmarshal(body, &connectorConfig); err == nil && connectorConfig.Name != "" {
+		if config.FORMAT == "json" {
+			enc := json.NewEncoder(os.Stdout)
+			enc.SetIndent("", "  ")
+			enc.Encode(connectorConfig)
+		} else if (config.FORMAT == "properties") {
+			configStr := fmt.Sprintf("name=%s\n", connectorConfig.Name);
+			for k, v := range connectorConfig.Config {
+				configStr += fmt.Sprintf("%s=%s\n", k, v)
+			}
+			fmt.Fprintf(os.Stdout, configStr)
+		}
+		return;
+	}
+
 	var obj interface{}
 	if err = json.Unmarshal(body, &obj); err != nil {
 		log.Fatal("Failed to print json", err)
 		return
 	}
-	
-	if config.FORMAT == "json" {
-    enc := json.NewEncoder(os.Stdout)
-  	enc.SetIndent("", "  ")
-		enc.Encode(obj)
-	} else if (config.FORMAT == "properties") {
-		fmt.Println("unsupported")
-	}
+	enc := json.NewEncoder(os.Stdout)
+	enc.SetIndent("", "  ")
+	enc.Encode(obj)
 }
 
 type ConnectorConfig struct {
