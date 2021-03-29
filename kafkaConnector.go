@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"path"
+	"sort"
 
 	"io/ioutil"
 	"encoding/json"
@@ -42,10 +43,20 @@ func HandleResponse(resp *http.Response) {
 			enc.SetIndent("", "  ")
 			enc.Encode(connectorConfig)
 		} else if (config.FORMAT == "properties") {
-			configStr := fmt.Sprintf("name=%s\n", connectorConfig.Name);
-			for k, v := range connectorConfig.Config {
-				configStr += fmt.Sprintf("%s=%s\n", k, v)
+			// sort keys
+			keys := make([]string, 0, len(connectorConfig.Config))
+			for k := range connectorConfig.Config {
+				keys = append(keys, k)
 			}
+			sort.Strings(keys)
+
+			// make properties
+			configStr := fmt.Sprintf("# ConnectorName: %s on %s \n", connectorConfig.Name, config.KAFKA_CONNECT_REST);
+			for _, k := range keys {
+				configStr += fmt.Sprintf("%s=%s\n", k, connectorConfig.Config[k])
+			}
+
+			// print properties
 			fmt.Fprintf(os.Stdout, configStr)
 		}
 		return;
