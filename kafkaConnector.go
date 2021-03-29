@@ -27,7 +27,7 @@ func GetKafkaConnectUrl(paths ...string) string {
 	return restUri.String()
 }
 
-func HandleResponse(resp *http.Response) {
+func PrintConfig(resp *http.Response) {
 	body, err := ioutil.ReadAll(resp.Body);
 	defer resp.Body.Close()
 	if err != nil {
@@ -37,7 +37,7 @@ func HandleResponse(resp *http.Response) {
 
 	// handle if config
 	var connectorConfig ConnectorConfig;
-	if err = json.Unmarshal(body, &connectorConfig); err == nil && connectorConfig.Name != "" {
+	if err = json.Unmarshal(body, &connectorConfig); err == nil {
 		if config.FORMAT == "json" {
 			enc := json.NewEncoder(os.Stdout)
 			enc.SetIndent("", "  ")
@@ -60,6 +60,15 @@ func HandleResponse(resp *http.Response) {
 			fmt.Fprintf(os.Stdout, configStr)
 		}
 		return;
+	}
+}
+
+func HandleResponse(resp *http.Response) {
+	body, err := ioutil.ReadAll(resp.Body);
+	defer resp.Body.Close()
+	if err != nil {
+		log.Fatal(err)
+		return
 	}
 
 	var obj interface{}

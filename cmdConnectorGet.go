@@ -20,6 +20,6 @@ var cmdConnectorGet = &cobra.Command{
 			log.Fatal(err)
 			return
 		}
-		HandleResponse(resp)
+		PrintConfig(resp)
 	},
 }

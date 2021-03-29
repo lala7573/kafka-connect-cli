@@ -14,7 +14,7 @@ func getenv(key string, defaultVal string) string {
 	return defaultVal
 }
 
-const version = "0.0.2"
+const version = "0.0.4"
 var cmdVersion = &cobra.Command{
 	Use:                   "version",
 	Short:                 "Version",
